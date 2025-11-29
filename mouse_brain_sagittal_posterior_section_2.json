@@ -1,0 +1,35 @@
+{
+    "metadata_general": {
+        "Product": "Spatial Gene Expression",
+        "Assay": "visium spatial gene expression",
+        "Biomaterial Type": "Specimen from Organism",
+        "Organism": "Mus musculus",
+        "Tissue": "brain",
+        "Modality": "RNA",
+        "Dataset Url": "https://www.10xgenomics.com/datasets/mouse-brain-serial-section-2-sagittal-posterior-1-standard-1-0-0",
+        "License": "Creative Commons Attribution 4.0 International",
+        "Publication Date": "2019-12-02",
+        "Sample ID at Source": "V19L29-035",
+        "Disease": "normal",
+        "Chemistry Version": "Visium v1",
+        "Preservation Method": "Fresh Frozen",
+        "Staining Method": "H&E",
+        "Instrument(s)": "Illumina NovaSeq 6000",
+        "Software": "Space Ranger v1.0.0"
+    },
+    "metadata_visium": {
+        "Sequencing Configuration": "28 x 120 bp",
+        "Slide Area": "B1",
+        "Number of Spots": 3293,
+        "Genes Detected": 20328,
+        "Median Genes per Spot": 4368.0,
+        "Mean Reads per Spot": 73468.26024901305,
+        "Transcriptome": "mm10-2020-A",
+        "Microscope": "Nikon Ti2-E microscope",
+        "Objective": "10X objective",
+        "Numerical Aperture": "0.45",
+        "Camera": "Color camera",
+        "Exposure": "10 ms",
+        "Gain": "4.5X"
+    }
+}

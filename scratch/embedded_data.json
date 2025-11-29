@@ -1,0 +1,368 @@
+{
+  "props": {
+    "pageProps": {
+      "dataset": {
+        "title": "Mouse Brain Serial Section 2 (Sagittal-Posterior)",
+        "publishedAt": "2019-12-02T00:00:00-08:00",
+        "alert": null,
+        "files": [
+          {
+            "fileset": {
+              "inputs": [
+                {
+                  "filename": "fastqs.tar",
+                  "title": "FASTQs"
+                },
+                {
+                  "filename": "image.tif",
+                  "title": "Image (TIFF)"
+                },
+                {
+                  "filename": "image.jpg",
+                  "title": "Image (JPG)"
+                },
+                {
+                  "filename": "alignment_file.json",
+                  "title": "Manual alignment file"
+                },
+                {
+                  "filename": "target_panel.csv",
+                  "title": "Target Panel"
+                },
+                {
+                  "filename": "probe_set.csv",
+                  "title": "Probe Set"
+                }
+              ],
+              "outputDocsUrl": "/support/software/space-ranger/latest/analysis/outputs/output-overview",
+              "outputs": [
+                {
+                  "filename": "possorted_genome_bam.bam",
+                  "title": "Genome-aligned BAM"
+                },
+                {
+                  "filename": "possorted_genome_bam.bam.bai",
+                  "title": "Genome-aligned BAM index"
+                },
+                {
+                  "filename": "molecule_info.h5",
+                  "title": "Per-molecule read information"
+                },
+                {
+                  "filename": "filtered_feature_bc_matrix.h5",
+                  "title": "Feature / barcode matrix HDF5 (filtered)"
+                },
+                {
+                  "filename": "filtered_feature_bc_matrix.tar.gz",
+                  "title": "Feature / barcode matrix (filtered)"
+                },
+                {
+                  "filename": "raw_feature_bc_matrix.h5",
+                  "title": "Feature / barcode matrix HDF5 (raw)"
+                },
+                {
+                  "filename": "raw_feature_bc_matrix.tar.gz",
+                  "title": "Feature / barcode matrix (raw)"
+                },
+                {
+                  "filename": "analysis.tar.gz",
+                  "title": "Clustering analysis"
+                },
+                {
+                  "filename": "spatial.tar.gz",
+                  "title": "Spatial imaging data"
+                },
+                {
+                  "filename": "spatial_enrichment.csv",
+                  "title": "Spatial Enrichment (Moran's I)"
+                },
+                {
+                  "filename": "metrics_summary.csv",
+                  "title": "Summary CSV"
+                },
+                {
+                  "filename": "web_summary.html",
+                  "title": "Summary HTML"
+                },
+                {
+                  "filename": "cloupe.cloupe",
+                  "title": "Loupe Browser file"
+                }
+              ],
+              "summaries": [
+                {
+                  "filename": "web_summary.html",
+                  "title": "Summary"
+                }
+              ]
+            },
+            "resourceId": "V1_Mouse_Brain_Sagittal_Posterior_Section_2",
+            "title": "Files",
+            "showFileNames": null
+          }
+        ],
+        "additionalApplications": null,
+        "anatomicalEntities": [
+          "brain"
+        ],
+        "biomaterialTypes": [
+          "Specimen from Organism"
+        ],
+        "body": "\n10x Genomics obtained fresh frozen mouse brain tissue (Strain C57BL/6) from [BioIVT](https://bioivt.com) Asterand. The tissue was embedded and cryosectioned as described in Visium Spatial Protocols - Tissue Preparation Guide Demonstrated Protocol ([CG000240](/support/spatial-gene-expression-fresh-frozen/documentation/steps/tissue-prep/visium-spatial-protocols-tissue-preparation-guide)). Tissue sections of 10 \u00b5m thickness from a sagittal slice of the posterior were placed on Visium Gene Expression Slides.\n\n- Sex: Male\n- Age: >8 weeks\n- Strain: C57BL/6\n- Section Orientation: Sagittal Slice of the Posterior\n\nThe H&E image acquired using a Nikon Ti2-E microscope with the following settings:\n\n- Color camera\n- 10X objective\n- Numerical Aperture: 0.45\n- Exposure: 10 ms\n- Gain: 4.5X\n\nThe Visium Spatial Gene Expression library was prepared following the Visium Spatial Gene Expression Reagent Kits User Guide ([CG000239](/support/spatial-gene-expression-fresh-frozen/documentation/steps/library-construction/visium-spatial-gene-expression-reagent-kits-user-guide)). Sequencing data was processed using Space Ranger.\n\n- Sequencing instrument: Illumina NovaSeq 6000\n- Sequencing Depth: 73,468 read pairs per spot\n- Sequencing Configuration: 28 x 120 bp\n- Sequencing Coverage: Read 1 - 28 bp (includes 16 bp Spatial Barcode, 12 bp UMI); Read 2 - 120 bp (transcript); i7 sample index - 10 bp; i5 sample index - 10 bp.\n- Dual-Index set T1T2-H3\n- Slide: V19L29-035\n- Area: B1\n\nKey cell metrics were:\n\n- Spots detected under tissue: 3,293\n- Median UMI counts per spot: 13,524\n- Median genes per spot: 4,368\n",
+        "cellNucleiCount": null,
+        "cellsOrNuclei": null,
+        "diseaseStates": null,
+        "donorCount": "1",
+        "featureBarcodes": null,
+        "instruments": [],
+        "preservationMethods": [
+          "Fresh Frozen"
+        ],
+        "pipeline": {
+          "version": "1.0.0"
+        },
+        "product": {
+          "name": "Spatial Gene Expression",
+          "slug": "spatial-gene-expression"
+        },
+        "selectedCellTypes": null,
+        "software": {
+          "name": "Space Ranger"
+        },
+        "species": [
+          "Mouse"
+        ],
+        "subPipelines": [
+          "spaceranger count"
+        ],
+        "webDemo": null,
+        "mdx": {
+          "compiledSource": "\"use strict\";\nconst {Fragment: _Fragment, jsx: _jsx, jsxs: _jsxs} = arguments[0];\nconst {useMDXComponents: _provideComponents} = arguments[0];\nfunction _createMdxContent(props) {\n  const _components = {\n    a: \"a\",\n    li: \"li\",\n    p: \"p\",\n    ul: \"ul\",\n    ..._provideComponents(),\n    ...props.components\n  };\n  return _jsxs(_Fragment, {\n    children: [_jsxs(_components.p, {\n      children: [\"10x Genomics obtained fresh frozen mouse brain tissue (Strain C57BL/6) from \", _jsx(_components.a, {\n        href: \"https://bioivt.com\",\n        children: \"BioIVT\"\n      }), \" Asterand. The tissue was embedded and cryosectioned as described in Visium Spatial Protocols - Tissue Preparation Guide Demonstrated Protocol (\", _jsx(_components.a, {\n        href: \"/support/spatial-gene-expression-fresh-frozen/documentation/steps/tissue-prep/visium-spatial-protocols-tissue-preparation-guide\",\n        children: \"CG000240\"\n      }), \"). Tissue sections of 10 \u00b5m thickness from a sagittal slice of the posterior were placed on Visium Gene Expression Slides.\"]\n    }), \"\\n\", _jsxs(_components.ul, {\n      children: [\"\\n\", _jsx(_components.li, {\n        children: \"Sex: Male\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Age: >8 weeks\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Strain: C57BL/6\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Section Orientation: Sagittal Slice of the Posterior\"\n      }), \"\\n\"]\n    }), \"\\n\", _jsx(_components.p, {\n      children: \"The H&E image acquired using a Nikon Ti2-E microscope with the following settings:\"\n    }), \"\\n\", _jsxs(_components.ul, {\n      children: [\"\\n\", _jsx(_components.li, {\n        children: \"Color camera\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"10X objective\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Numerical Aperture: 0.45\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Exposure: 10 ms\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Gain: 4.5X\"\n      }), \"\\n\"]\n    }), \"\\n\", _jsxs(_components.p, {\n      children: [\"The Visium Spatial Gene Expression library was prepared following the Visium Spatial Gene Expression Reagent Kits User Guide (\", _jsx(_components.a, {\n        href: \"/support/spatial-gene-expression-fresh-frozen/documentation/steps/library-construction/visium-spatial-gene-expression-reagent-kits-user-guide\",\n        children: \"CG000239\"\n      }), \"). Sequencing data was processed using Space Ranger.\"]\n    }), \"\\n\", _jsxs(_components.ul, {\n      children: [\"\\n\", _jsx(_components.li, {\n        children: \"Sequencing instrument: Illumina NovaSeq 6000\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Sequencing Depth: 73,468 read pairs per spot\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Sequencing Configuration: 28 x 120 bp\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Sequencing Coverage: Read 1 - 28 bp (includes 16 bp Spatial Barcode, 12 bp UMI); Read 2 - 120 bp (transcript); i7 sample index - 10 bp; i5 sample index - 10 bp.\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Dual-Index set T1T2-H3\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Slide: V19L29-035\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Area: B1\"\n      }), \"\\n\"]\n    }), \"\\n\", _jsx(_components.p, {\n      children: \"Key cell metrics were:\"\n    }), \"\\n\", _jsxs(_components.ul, {\n      children: [\"\\n\", _jsx(_components.li, {\n        children: \"Spots detected under tissue: 3,293\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Median UMI counts per spot: 13,524\"\n      }), \"\\n\", _jsx(_components.li, {\n        children: \"Median genes per spot: 4,368\"\n      }), \"\\n\"]\n    })]\n  });\n}\nfunction MDXContent(props = {}) {\n  const {wrapper: MDXLayout} = {\n    ..._provideComponents(),\n    ...props.components\n  };\n  return MDXLayout ? _jsx(MDXLayout, {\n    ...props,\n    children: _jsx(_createMdxContent, {\n      ...props\n    })\n  }) : _createMdxContent(props);\n}\nreturn {\n  default: MDXContent\n};\n",
+          "frontmatter": {},
+          "scope": {}
+        }
+      },
+      "filesetMap": {
+        "Files": {
+          "inputs": [
+            {
+              "bytes": 22579834880,
+              "md5sum": "6553e417fd136fc63ae9196536dec5b4",
+              "title": "FASTQs",
+              "url": "https://s3-us-west-2.amazonaws.com/10x.files/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_fastqs.tar"
+            },
+            {
+              "bytes": 404788976,
+              "md5sum": "2a990697981c251d578195436bdf5275",
+              "title": "Image (TIFF)",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_image.tif"
+            }
+          ],
+          "outputDocsUrl": "/support/software/space-ranger/latest/analysis/outputs/output-overview",
+          "outputs": [
+            {
+              "bytes": 16720436756,
+              "md5sum": "8979b57b113f6b1a3b26265c6108c691",
+              "title": "Genome-aligned BAM",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_possorted_genome_bam.bam"
+            },
+            {
+              "bytes": 4681048,
+              "md5sum": "9e84afefc73ce7cdda163158bb191404",
+              "title": "Genome-aligned BAM index",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_possorted_genome_bam.bam.bai"
+            },
+            {
+              "bytes": 250959391,
+              "md5sum": "a57e250823b8c335d0e2396c84bdebaa",
+              "title": "Per-molecule read information",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_molecule_info.h5"
+            },
+            {
+              "bytes": 19193917,
+              "md5sum": "2d22b3388ebb7087f7ad2b43b93fb866",
+              "title": "Feature / barcode matrix HDF5 (filtered)",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_filtered_feature_bc_matrix.h5"
+            },
+            {
+              "bytes": 52456484,
+              "md5sum": "7a0352ff6eb01380b1d3b0ec42808e9a",
+              "title": "Feature / barcode matrix (filtered)",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_filtered_feature_bc_matrix.tar.gz"
+            },
+            {
+              "bytes": 21139063,
+              "md5sum": "65171aae0cdf9930a5b9a6ad145e8011",
+              "title": "Feature / barcode matrix HDF5 (raw)",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_raw_feature_bc_matrix.h5"
+            },
+            {
+              "bytes": 57129267,
+              "md5sum": "a88f0af1a34223026d2081bba5337b30",
+              "title": "Feature / barcode matrix (raw)",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_raw_feature_bc_matrix.tar.gz"
+            },
+            {
+              "bytes": 30659330,
+              "md5sum": "6334696975a1bf80b09809d59d4e11e5",
+              "title": "Clustering analysis",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_analysis.tar.gz"
+            },
+            {
+              "bytes": 10549891,
+              "md5sum": "16b898613b80bd5c805f53dc2b30eef4",
+              "title": "Spatial imaging data",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_spatial.tar.gz"
+            },
+            {
+              "bytes": 976,
+              "md5sum": "81f7c6ab8c75fc727d979e78c7f95f1d",
+              "title": "Summary CSV",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_metrics_summary.csv"
+            },
+            {
+              "bytes": 9090160,
+              "md5sum": "7dfa65431efb23e177e314b8c469abd6",
+              "title": "Summary HTML",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_web_summary.html"
+            },
+            {
+              "bytes": 365063210,
+              "md5sum": "f42c5519611e2636b0f1c4a947fcc193",
+              "title": "Loupe Browser file",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_cloupe.cloupe"
+            }
+          ],
+          "summaries": [
+            {
+              "bytes": 9090160,
+              "md5sum": "7dfa65431efb23e177e314b8c469abd6",
+              "title": "Summary",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_web_summary.html"
+            }
+          ]
+        }
+      },
+      "groupedOutputMap": {
+        "Files": {
+          "general": [
+            {
+              "bytes": 16720436756,
+              "md5sum": "8979b57b113f6b1a3b26265c6108c691",
+              "title": "Genome-aligned BAM",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_possorted_genome_bam.bam"
+            },
+            {
+              "bytes": 4681048,
+              "md5sum": "9e84afefc73ce7cdda163158bb191404",
+              "title": "Genome-aligned BAM index",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_possorted_genome_bam.bam.bai"
+            },
+            {
+              "bytes": 250959391,
+              "md5sum": "a57e250823b8c335d0e2396c84bdebaa",
+              "title": "Per-molecule read information",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_molecule_info.h5"
+            },
+            {
+              "bytes": 19193917,
+              "md5sum": "2d22b3388ebb7087f7ad2b43b93fb866",
+              "title": "Feature / barcode matrix HDF5 (filtered)",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_filtered_feature_bc_matrix.h5"
+            },
+            {
+              "bytes": 52456484,
+              "md5sum": "7a0352ff6eb01380b1d3b0ec42808e9a",
+              "title": "Feature / barcode matrix (filtered)",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_filtered_feature_bc_matrix.tar.gz"
+            },
+            {
+              "bytes": 21139063,
+              "md5sum": "65171aae0cdf9930a5b9a6ad145e8011",
+              "title": "Feature / barcode matrix HDF5 (raw)",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_raw_feature_bc_matrix.h5"
+            },
+            {
+              "bytes": 57129267,
+              "md5sum": "a88f0af1a34223026d2081bba5337b30",
+              "title": "Feature / barcode matrix (raw)",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_raw_feature_bc_matrix.tar.gz"
+            },
+            {
+              "bytes": 30659330,
+              "md5sum": "6334696975a1bf80b09809d59d4e11e5",
+              "title": "Clustering analysis",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_analysis.tar.gz"
+            },
+            {
+              "bytes": 10549891,
+              "md5sum": "16b898613b80bd5c805f53dc2b30eef4",
+              "title": "Spatial imaging data",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_spatial.tar.gz"
+            },
+            {
+              "bytes": 976,
+              "md5sum": "81f7c6ab8c75fc727d979e78c7f95f1d",
+              "title": "Summary CSV",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_metrics_summary.csv"
+            },
+            {
+              "bytes": 9090160,
+              "md5sum": "7dfa65431efb23e177e314b8c469abd6",
+              "title": "Summary HTML",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_web_summary.html"
+            },
+            {
+              "bytes": 365063210,
+              "md5sum": "f42c5519611e2636b0f1c4a947fcc193",
+              "title": "Loupe Browser file",
+              "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_cloupe.cloupe"
+            }
+          ],
+          "geneExpression": [],
+          "bcr": [],
+          "tcr": [],
+          "supplemental": []
+        }
+      },
+      "groupedSamples": {
+        "sample": [],
+        "raw": [
+          "Files"
+        ]
+      },
+      "visualizationFiles": {
+        "loupeBrowserRaw": [
+          {
+            "bytes": 365063210,
+            "md5sum": "f42c5519611e2636b0f1c4a947fcc193",
+            "title": "Loupe Browser file",
+            "url": "https://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Posterior_Section_2/V1_Mouse_Brain_Sagittal_Posterior_Section_2_cloupe.cloupe",
+            "sample": "Files"
+          }
+        ],
+        "loupeBrowserSample": [],
+        "loupeVdj": [],
+        "xeniumExplorer": [],
+        "xeniumExplorerSubset": []
+      }
+    },
+    "__N_SSG": true
+  },
+  "page": "/datasets/[slug]",
+  "query": {
+    "slug": "mouse-brain-serial-section-2-sagittal-posterior-1-standard-1-0-0"
+  },
+  "buildId": "KKV7BXdQw5nEzdxTuiA8a",
+  "isFallback": false,
+  "isExperimentalCompile": false,
+  "gsp": true,
+  "locale": "en",
+  "locales": [
+    "en",
+    "cn",
+    "jp"
+  ],
+  "defaultLocale": "en",
+  "scriptLoader": []
+}

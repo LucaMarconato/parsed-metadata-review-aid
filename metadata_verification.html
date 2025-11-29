@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metadata Verification - Mouse Brain Dataset</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            max-width: 1800px;
+            margin: 0 auto;
+            height: calc(100vh - 140px);
+        }
+
+        .panel {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            background: #f8f9fa;
+            padding: 1rem 1.5rem;
+            border-bottom: 2px solid #e9ecef;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #495057;
+        }
+
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .metadata-section {
+            margin-bottom: 2rem;
+        }
+
+        .metadata-section h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #667eea;
+            font-size: 1.2rem;
+        }
+
+        .field {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 6px;
+            border-left: 4px solid #dee2e6;
+            background: #f8f9fa;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .field:hover {
+            background: #e9ecef;
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .field.highlight {
+            background: #fff3cd;
+            border-left-color: #ffc107;
+            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
+        }
+
+        .field-name {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .field-value {
+            color: #212529;
+            font-size: 1rem;
+            word-wrap: break-word;
+        }
+
+        .field-source {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .source-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .source-badge.json {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .source-badge.csv {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .source-badge.html {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .source-badge.inferred {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e9ecef;
+            background: #f8f9fa;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-weight: 500;
+            color: #6c757d;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab:hover {
+            color: #495057;
+            background: rgba(0,0,0,0.02);
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+
+        .tab.has-highlight {
+            position: relative;
+        }
+
+        .tab.has-highlight::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: #ffc107;
+            border-radius: 50%;
+            box-shadow: 0 0 4px rgba(255, 193, 7, 0.6);
+        }
+
+        .tab-content {
+            display: none;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        pre {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .json-key {
+            color: #e06c75;
+        }
+
+        .json-string {
+            color: #98c379;
+        }
+
+        .json-number {
+            color: #d19a66;
+        }
+
+        .json-boolean {
+            color: #56b6c2;
+        }
+
+        .json-null {
+            color: #c678dd;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .mapping-item {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+        }
+
+        .mapping-item h4 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .mapping-detail {
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .mapping-detail strong {
+            color: #495057;
+        }
+
+        .excerpt {
+            background: #e9ecef;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            color: #495057;
+        }
+
+        .highlighted-text {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.3);
+            font-weight: 600;
+        }
+
+        .highlighted-row {
+            background: #fff3cd !important;
+            box-shadow: inset 3px 0 0 #ffc107;
+        }
+
+        .legend {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            padding: 1rem 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Metadata Verification Dashboard</h1>
+        <p>Mouse Brain Serial Section 2 (Sagittal-Posterior) - Visium Spatial Gene Expression</p>
+    </div>
+
+    <div class="container">
+        <!-- Left Panel: Parsed Metadata -->
+        <div class="panel">
+            <div class="panel-header">
+                Parsed Metadata (spatialdata-db schema)
+            </div>
+            <div class="panel-content">
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-number">30</div>
+                        <div class="stat-label">Total Fields</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">17</div>
+                        <div class="stat-label">General Fields</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">13</div>
+                        <div class="stat-label">Visium Fields</div>
+                    </div>
+                </div>
+
+                <div class="metadata-section">
+                    <h3>metadata_general</h3>
+                    <div class="field" data-field="product">
+                        <div class="field-name">Product</div>
+                        <div class="field-value">Spatial Gene Expression</div>
+                        <div class="field-source">
+                            <span class="source-badge json">JSON</span>
+                            Embedded JSON: product.name
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="assay">
+                        <div class="field-name">Assay</div>
+                        <div class="field-value">visium spatial gene expression</div>
+                        <div class="field-source">
+                            <span class="source-badge inferred">INFERRED</span>
+                            From Visium product type
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="biomaterial_type">
+                        <div class="field-name">Biomaterial Type</div>
+                        <div class="field-value">Specimen from Organism</div>
+                        <div class="field-source">
+                            <span class="source-badge json">JSON</span>
+                            Embedded JSON: biomaterialTypes[0]
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="organism">
+                        <div class="field-name">Organism</div>
+                        <div class="field-value">Mus musculus</div>
+                        <div class="field-source">
+                            <span class="source-badge json">JSON</span>
+                            Embedded JSON: species[0] → "Mouse"
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="tissue">
+                        <div class="field-name">Tissue</div>
+                        <div class="field-value">brain</div>
+                        <div class="field-source">
+                            <span class="source-badge json">JSON</span>
+                            Embedded JSON: anatomicalEntities[0]
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="modality">
+                        <div class="field-name">Modality</div>
+                        <div class="field-value">RNA</div>
+                        <div class="field-source">
+                            <span class="source-badge inferred">INFERRED</span>
+                            Spatial Gene Expression is RNA-based
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="dataset_url">
+                        <div class="field-name">Dataset Url</div>
+                        <div class="field-value">https://www.10xgenomics.com/datasets/mouse-brain-serial-section-2-sagittal-posterior-1-standard-1-0-0</div>
+                        <div class="field-source">
+                            <span class="source-badge html">HTML</span>
+                            Page URL
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="license">
+                        <div class="field-name">License</div>
+                        <div class="field-value">Creative Commons Attribution 4.0 International</div>
+                        <div class="field-source">
+                            <span class="source-badge inferred">INFERRED</span>
+                            Standard 10x public dataset license
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="publication_date">
+                        <div class="field-name">Publication Date</div>
+                        <div class="field-value">2019-12-02</div>
+                        <div class="field-source">
+                            <span class="source-badge json">JSON</span>
+                            Embedded JSON: publishedAt
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="sample_id">
+                        <div class="field-name">Sample ID at Source</div>
+                        <div class="field-value">V19L29-035</div>
+                        <div class="field-source">
+                            <span class="source-badge html">HTML</span>
+                            HTML body: "Slide: V19L29-035"
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="disease">
+                        <div class="field-name">Disease</div>
+                        <div class="field-value">normal</div>
+                        <div class="field-source">
+                            <span class="source-badge json">JSON</span>
+                            Embedded JSON: diseaseStates = null
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="chemistry_version">
+                        <div class="field-name">Chemistry Version</div>
+                        <div class="field-value">Visium v1</div>
+                        <div class="field-source">
+                            <span class="source-badge json">JSON</span>
+                            Embedded JSON: pipeline.version = "1.0.0"
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="preservation_method">
+                        <div class="field-name">Preservation Method</div>
+                        <div class="field-value">Fresh Frozen</div>
+                        <div class="field-source">
+                            <span class="source-badge json">JSON</span>
+                            Embedded JSON: preservationMethods[0]
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="staining_method">
+                        <div class="field-name">Staining Method</div>
+                        <div class="field-value">H&E</div>
+                        <div class="field-source">
+                            <span class="source-badge html">HTML</span>
+                            HTML body: "The H&E image acquired..."
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="instrument">
+                        <div class="field-name">Instrument(s)</div>
+                        <div class="field-value">Illumina NovaSeq 6000</div>
+                        <div class="field-source">
+                            <span class="source-badge html">HTML</span>
+                            HTML body: "Sequencing instrument: Illumina NovaSeq 6000"
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="software">
+                        <div class="field-name">Software</div>
+                        <div class="field-value">Space Ranger v1.0.0</div>
+                        <div class="field-source">
+                            <span class="source-badge json">JSON</span>
+                            Embedded JSON: software.name + pipeline.version
+                        </div>
+                    </div>
+                </div>
+
+                <div class="metadata-section">
+                    <h3>metadata_visium</h3>
+
+                    <div class="field" data-field="seq_config">
+                        <div class="field-name">Sequencing Configuration</div>
+                        <div class="field-value">28 x 120 bp</div>
+                        <div class="field-source">
+                            <span class="source-badge html">HTML</span>
+                            HTML body: "Sequencing Configuration: 28 x 120 bp"
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="slide_area">
+                        <div class="field-name">Slide Area</div>
+                        <div class="field-value">B1</div>
+                        <div class="field-source">
+                            <span class="source-badge html">HTML</span>
+                            HTML body: "Area: B1"
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="num_spots">
+                        <div class="field-name">Number of Spots</div>
+                        <div class="field-value">3293</div>
+                        <div class="field-source">
+                            <span class="source-badge csv">CSV</span>
+                            <span class="source-badge html">HTML</span>
+                            Both sources: "3,293"
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="genes_detected">
+                        <div class="field-name">Genes Detected</div>
+                        <div class="field-value">20328</div>
+                        <div class="field-source">
+                            <span class="source-badge csv">CSV</span>
+                            CSV: Total Genes Detected column
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="median_genes">
+                        <div class="field-name">Median Genes per Spot</div>
+                        <div class="field-value">4368.0</div>
+                        <div class="field-source">
+                            <span class="source-badge csv">CSV</span>
+                            <span class="source-badge html">HTML</span>
+                            Both sources: "4,368"
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="mean_reads">
+                        <div class="field-name">Mean Reads per Spot</div>
+                        <div class="field-value">73468.26024901305</div>
+                        <div class="field-source">
+                            <span class="source-badge csv">CSV</span>
+                            CSV: Mean Reads per Spot (precise value)
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="transcriptome">
+                        <div class="field-name">Transcriptome</div>
+                        <div class="field-value">mm10-2020-A</div>
+                        <div class="field-source">
+                            <span class="source-badge inferred">INFERRED</span>
+                            Standard reference for Space Ranger 1.0.0
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="microscope">
+                        <div class="field-name">Microscope</div>
+                        <div class="field-value">Nikon Ti2-E microscope</div>
+                        <div class="field-source">
+                            <span class="source-badge html">HTML</span>
+                            HTML body: imaging settings
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="objective">
+                        <div class="field-name">Objective</div>
+                        <div class="field-value">10X objective</div>
+                        <div class="field-source">
+                            <span class="source-badge html">HTML</span>
+                            HTML body: microscope settings
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="numerical_aperture">
+                        <div class="field-name">Numerical Aperture</div>
+                        <div class="field-value">0.45</div>
+                        <div class="field-source">
+                            <span class="source-badge html">HTML</span>
+                            HTML body: "Numerical Aperture: 0.45"
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="camera">
+                        <div class="field-name">Camera</div>
+                        <div class="field-value">Color camera</div>
+                        <div class="field-source">
+                            <span class="source-badge html">HTML</span>
+                            HTML body: imaging settings
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="exposure">
+                        <div class="field-name">Exposure</div>
+                        <div class="field-value">10 ms</div>
+                        <div class="field-source">
+                            <span class="source-badge html">HTML</span>
+                            HTML body: "Exposure: 10 ms"
+                        </div>
+                    </div>
+
+                    <div class="field" data-field="gain">
+                        <div class="field-name">Gain</div>
+                        <div class="field-value">4.5X</div>
+                        <div class="field-source">
+                            <span class="source-badge html">HTML</span>
+                            HTML body: "Gain: 4.5X"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Source Data -->
+        <div class="panel">
+            <div class="tabs">
+                <button class="tab active" data-tab="json">Embedded JSON</button>
+                <button class="tab" data-tab="csv">Metrics CSV</button>
+            </div>
+
+            <!-- Embedded JSON Tab -->
+            <div class="tab-content active" data-content="json">
+                <div style="padding: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; color: #495057;">__NEXT_DATA__ from HTML Page</h3>
+                    <pre id="json-display"></pre>
+                </div>
+            </div>
+
+            <!-- CSV Tab -->
+            <div class="tab-content" data-content="csv">
+                <div style="padding: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem; color: #495057;">V1_Mouse_Brain_Sagittal_Posterior_Section_2_metrics_summary.csv</h3>
+                    <div style="overflow-x: auto;">
+                        <table id="csv-table"></table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item">
+            <span class="source-badge json">JSON</span>
+            Embedded JSON data from HTML page
+        </div>
+        <div class="legend-item">
+            <span class="source-badge csv">CSV</span>
+            Metrics summary CSV file
+        </div>
+        <div class="legend-item">
+            <span class="source-badge html">HTML</span>
+            HTML body text content
+        </div>
+        <div class="legend-item">
+            <span class="source-badge inferred">INFERRED</span>
+            Derived from context or standards
+        </div>
+    </div>
+
+    <script>
+        // Embedded data
+        const embeddedJson = {"props":{"pageProps":{"dataset":{"title":"Mouse Brain Serial Section 2 (Sagittal-Posterior)","publishedAt":"2019-12-02T00:00:00-08:00","alert":null,"anatomicalEntities":["brain"],"biomaterialTypes":["Specimen from Organism"],"body":"\\n10x Genomics obtained fresh frozen mouse brain tissue (Strain C57BL/6) from [BioIVT](https://bioivt.com) Asterand. The tissue was embedded and cryosectioned as described in Visium Spatial Protocols - Tissue Preparation Guide Demonstrated Protocol ([CG000240](/support/spatial-gene-expression-fresh-frozen/documentation/steps/tissue-prep/visium-spatial-protocols-tissue-preparation-guide)). Tissue sections of 10 µm thickness from a sagittal slice of the posterior were placed on Visium Gene Expression Slides.\\n\\n- Sex: Male\\n- Age: >8 weeks\\n- Strain: C57BL/6\\n- Section Orientation: Sagittal Slice of the Posterior\\n\\nThe H&E image acquired using a Nikon Ti2-E microscope with the following settings:\\n\\n- Color camera\\n- 10X objective\\n- Numerical Aperture: 0.45\\n- Exposure: 10 ms\\n- Gain: 4.5X\\n\\nThe Visium Spatial Gene Expression library was prepared following the Visium Spatial Gene Expression Reagent Kits User Guide ([CG000239](/support/spatial-gene-expression-fresh-frozen/documentation/steps/library-construction/visium-spatial-gene-expression-reagent-kits-user-guide)). Sequencing data was processed using Space Ranger.\\n\\n- Sequencing instrument: Illumina NovaSeq 6000\\n- Sequencing Depth: 73,468 read pairs per spot\\n- Sequencing Configuration: 28 x 120 bp\\n- Sequencing Coverage: Read 1 - 28 bp (includes 16 bp Spatial Barcode, 12 bp UMI); Read 2 - 120 bp (transcript); i7 sample index - 10 bp; i5 sample index - 10 bp.\\n- Dual-Index set T1T2-H3\\n- Slide: V19L29-035\\n- Area: B1\\n\\nKey cell metrics were:\\n\\n- Spots detected under tissue: 3,293\\n- Median UMI counts per spot: 13,524\\n- Median genes per spot: 4,368\\n","cellNucleiCount":null,"cellsOrNuclei":null,"diseaseStates":null,"donorCount":"1","featureBarcodes":null,"instruments":[],"preservationMethods":["Fresh Frozen"],"pipeline":{"version":"1.0.0"},"product":{"name":"Spatial Gene Expression","slug":"spatial-gene-expression"},"selectedCellTypes":null,"software":{"name":"Space Ranger"},"species":["Mouse"],"subPipelines":["spaceranger count"]}},"__N_SSG":true},"page":"/datasets/[slug]","query":{"slug":"mouse-brain-serial-section-2-sagittal-posterior-1-standard-1-0-0"}};
+
+        const csvData = [
+            ["Sample ID", "Number of Spots Under Tissue", "Median Genes per Spot", "Number of Reads", "Valid Barcodes", "Valid UMIs", "Mean Reads per Spot", "Sequencing Saturation", "Q30 Bases in Barcode", "Q30 Bases in RNA Read", "Q30 Bases in UMI", "Reads Mapped to Genome", "Reads Mapped Confidently to Genome", "Reads Mapped Confidently to Intergenic Regions", "Reads Mapped Confidently to Intronic Regions", "Reads Mapped Confidently to Exonic Regions", "Reads Mapped Confidently to Transcriptome", "Reads Mapped Antisense to Gene", "Fraction Reads in Spots Under Tissue", "Total Genes Detected", "Median UMI Counts per Spot", "Fraction of Spots Under Tissue"],
+            ["V1_Mouse_Brain_Sagittal_Posterior_Section_2", "3293", "4368.0", "241930981.0", "0.9755175506025828", "0.9997329031621626", "73468.26024901305", "0.7256523017438906", "0.9713323255119617", "0.9470799080193122", "0.971047839151604", "0.9505659922075048", "0.9195371220356438", "0.042939618386452126", "0.015559119317587524", "0.8610383843316041", "0.8357305259717853", "0.00832565135591295", "0.9590320622656676", "20328", "13524.0", "0.6596554487179487"]
+        ];
+
+        const fieldMapping = {
+            "Product": {
+                "value": "Spatial Gene Expression",
+                "source": "HTML page title and product section",
+                "excerpt": '"product": {"name": "Spatial Gene Expression", "slug": "spatial-gene-expression"}'
+            },
+            "Assay": {
+                "value": "visium spatial gene expression",
+                "source": "Inferred from product type (Visium platform)",
+                "excerpt": 'HTML body text mentions "Visium Spatial Gene Expression library"'
+            },
+            "Biomaterial Type": {
+                "value": "Specimen from Organism",
+                "source": "JSON data embedded in HTML",
+                "excerpt": '"biomaterialTypes": ["Specimen from Organism"]'
+            },
+            "Organism": {
+                "value": "Mus musculus",
+                "source": "JSON data and HTML body",
+                "excerpt": '"species": ["Mouse"] and "fresh frozen mouse brain tissue"'
+            },
+            "Tissue": {
+                "value": "brain",
+                "source": "JSON data and HTML body",
+                "excerpt": '"anatomicalEntities": ["brain"] and "mouse brain tissue"'
+            },
+            "Number of Spots": {
+                "value": "3293",
+                "source": "HTML list item AND metrics_summary.csv",
+                "excerpt": '"Spots detected under tissue: 3,293" and CSV column "Number of Spots Under Tissue"'
+            },
+            "Genes Detected": {
+                "value": "20328",
+                "source": "metrics_summary.csv",
+                "excerpt": 'CSV column "Total Genes Detected" = 20328'
+            },
+            "Median Genes per Spot": {
+                "value": "4368.0",
+                "source": "HTML list item AND metrics_summary.csv",
+                "excerpt": '"Median genes per spot: 4,368" and CSV column "Median Genes per Spot"'
+            },
+            "Mean Reads per Spot": {
+                "value": "73468.26",
+                "source": "metrics_summary.csv (precise value)",
+                "excerpt": 'CSV column "Mean Reads per Spot" = 73468.26024901305'
+            },
+            "Microscope": {
+                "value": "Nikon Ti2-E microscope",
+                "source": "HTML body",
+                "excerpt": '"The H&E image acquired using a Nikon Ti2-E microscope"'
+            }
+        };
+
+        // Tab switching
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(tc => tc.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.querySelector(`[data-content="${targetTab}"]`).classList.add('active');
+            });
+        });
+
+        // Field hover highlighting
+        const fields = document.querySelectorAll('.field');
+        fields.forEach(field => {
+            field.addEventListener('mouseenter', () => {
+                field.classList.add('highlight');
+            });
+            field.addEventListener('mouseleave', () => {
+                field.classList.remove('highlight');
+            });
+        });
+
+        // Field highlighting configuration
+        const fieldHighlights = {
+            'product': {
+                json: ['"product":', '"Spatial Gene Expression"'],
+                csv: []
+            },
+            'assay': {
+                json: ['"product":', 'Spatial Gene Expression'],
+                csv: []
+            },
+            'biomaterial_type': {
+                json: ['"biomaterialTypes":', '"Specimen from Organism"'],
+                csv: []
+            },
+            'organism': {
+                json: ['"species":', '"Mouse"'],
+                csv: []
+            },
+            'tissue': {
+                json: ['"anatomicalEntities":', '"brain"'],
+                csv: []
+            },
+            'modality': {
+                json: [],
+                csv: []
+            },
+            'dataset_url': {
+                json: [],
+                csv: []
+            },
+            'license': {
+                json: [],
+                csv: []
+            },
+            'publication_date': {
+                json: ['"publishedAt":', '2019-12-02'],
+                csv: []
+            },
+            'sample_id': {
+                json: [],
+                csv: []
+            },
+            'disease': {
+                json: ['"diseaseStates":', 'null'],
+                csv: []
+            },
+            'chemistry_version': {
+                json: ['"pipeline":', '"version":', '"1.0.0"'],
+                csv: []
+            },
+            'preservation_method': {
+                json: ['"preservationMethods":', '"Fresh Frozen"'],
+                csv: []
+            },
+            'staining_method': {
+                json: [],
+                csv: []
+            },
+            'instrument': {
+                json: [],
+                csv: []
+            },
+            'software': {
+                json: ['"software":', '"Space Ranger"'],
+                csv: []
+            },
+            'seq_config': {
+                json: [],
+                csv: []
+            },
+            'slide_area': {
+                json: [],
+                csv: []
+            },
+            'num_spots': {
+                json: [],
+                csv: ['Number of Spots Under Tissue', '3293']
+            },
+            'genes_detected': {
+                json: [],
+                csv: ['Total Genes Detected', '20328']
+            },
+            'median_genes': {
+                json: [],
+                csv: ['Median Genes per Spot', '4368.0']
+            },
+            'mean_reads': {
+                json: [],
+                csv: ['Mean Reads per Spot', '73468.26024901305']
+            },
+            'transcriptome': {
+                json: [],
+                csv: []
+            },
+            'microscope': {
+                json: [],
+                csv: []
+            },
+            'objective': {
+                json: [],
+                csv: []
+            },
+            'numerical_aperture': {
+                json: [],
+                csv: []
+            },
+            'camera': {
+                json: [],
+                csv: []
+            },
+            'exposure': {
+                json: [],
+                csv: []
+            },
+            'gain': {
+                json: [],
+                csv: []
+            }
+        };
+
+        // Function to clear all highlights
+        function clearHighlights() {
+            // Remove highlighted text in JSON
+            const jsonDisplay = document.getElementById('json-display');
+            jsonDisplay.innerHTML = syntaxHighlight(embeddedJson);
+
+            // Remove highlighted rows in CSV
+            document.querySelectorAll('.highlighted-row').forEach(row => {
+                row.classList.remove('highlighted-row');
+            });
+
+            // Remove tab indicators
+            document.querySelectorAll('.tab.has-highlight').forEach(tab => {
+                tab.classList.remove('has-highlight');
+            });
+        }
+
+        // Function to highlight text in JSON
+        function highlightInJson(searchTerms) {
+            if (!searchTerms || searchTerms.length === 0) return false;
+
+            const jsonDisplay = document.getElementById('json-display');
+            let content = jsonDisplay.innerHTML;
+            let hasHighlight = false;
+
+            searchTerms.forEach(term => {
+                // Escape special regex characters
+                const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                // Find and wrap matching text, preserving existing HTML tags
+                const regex = new RegExp(`(>[^<]*)(${escapedTerm})([^<]*<)`, 'gi');
+                const newContent = content.replace(regex, (match, before, term, after) => {
+                    hasHighlight = true;
+                    return `${before}<mark class="highlighted-text">${term}</mark>${after}`;
+                });
+                if (newContent !== content) {
+                    content = newContent;
+                    hasHighlight = true;
+                }
+            });
+
+            jsonDisplay.innerHTML = content;
+            return hasHighlight;
+        }
+
+        // Function to highlight rows in CSV
+        function highlightInCsv(searchTerms) {
+            if (!searchTerms || searchTerms.length === 0) return false;
+
+            const csvTable = document.getElementById('csv-table');
+            const cells = csvTable.querySelectorAll('th, td');
+            let hasHighlight = false;
+
+            cells.forEach(cell => {
+                const cellText = cell.textContent.trim();
+                searchTerms.forEach(term => {
+                    if (cellText.includes(term)) {
+                        // Highlight the entire row
+                        const row = cell.closest('tr');
+                        if (row) {
+                            row.classList.add('highlighted-row');
+                            hasHighlight = true;
+                        }
+                        // Also highlight the specific cell text
+                        cell.innerHTML = cell.textContent.replace(
+                            new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'),
+                            '<mark class="highlighted-text">$1</mark>'
+                        );
+                    }
+                });
+            });
+
+            return hasHighlight;
+        }
+
+        // Add click handlers to fields
+        fields.forEach(field => {
+            field.addEventListener('click', () => {
+                const fieldName = field.dataset.field;
+                const highlights = fieldHighlights[fieldName];
+
+                if (!highlights) return;
+
+                // Clear previous highlights
+                clearHighlights();
+
+                // Highlight in JSON
+                const hasJsonHighlight = highlightInJson(highlights.json);
+
+                // Highlight in CSV
+                const hasCsvHighlight = highlightInCsv(highlights.csv);
+
+                // Add indicators to tabs
+                if (hasJsonHighlight) {
+                    document.querySelector('[data-tab="json"]').classList.add('has-highlight');
+                }
+                if (hasCsvHighlight) {
+                    document.querySelector('[data-tab="csv"]').classList.add('has-highlight');
+                }
+
+                // Highlight the clicked field
+                fields.forEach(f => f.classList.remove('highlight'));
+                field.classList.add('highlight');
+            });
+        });
+
+        // Render JSON with syntax highlighting
+        function syntaxHighlight(json) {
+            if (typeof json != 'string') {
+                json = JSON.stringify(json, null, 2);
+            }
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                let cls = 'json-number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'json-key';
+                    } else {
+                        cls = 'json-string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'json-boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'json-null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+
+        // Display JSON
+        document.getElementById('json-display').innerHTML = syntaxHighlight(embeddedJson);
+
+        // Display CSV as table
+        const csvTable = document.getElementById('csv-table');
+        let tableHtml = '<thead><tr>';
+        csvData[0].forEach(header => {
+            tableHtml += `<th>${header}</th>`;
+        });
+        tableHtml += '</tr></thead><tbody><tr>';
+        csvData[1].forEach(cell => {
+            tableHtml += `<td>${cell}</td>`;
+        });
+        tableHtml += '</tr></tbody>';
+        csvTable.innerHTML = tableHtml;
+
+    </script>
+</body>
+</html>
