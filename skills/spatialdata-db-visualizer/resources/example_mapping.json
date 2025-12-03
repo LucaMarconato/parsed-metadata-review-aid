@@ -1,0 +1,62 @@
+{
+  "Product": {
+    "value": "In Situ Gene Expression",
+    "excerpts": [
+      {
+        "file": "source_page.html",
+        "text": "In Situ Gene Expression",
+        "context": "Product: In Situ Gene Expression - Xenium Platform"
+      }
+    ]
+  },
+  "Assay": {
+    "value": "spatial transcriptomics",
+    "excerpts": [
+      {
+        "file": "source_page.html",
+        "text": "spatial transcriptomics",
+        "context": "This dataset uses spatial transcriptomics technology"
+      }
+    ]
+  },
+  "Organism": {
+    "value": "Homo sapiens",
+    "excerpts": [
+      {
+        "file": "source_page.html",
+        "text": "Homo sapiens",
+        "context": "Species: Homo sapiens (Human)"
+      }
+    ]
+  },
+  "Tissue": {
+    "value": "breast",
+    "excerpts": [
+      {
+        "file": "source_page.html",
+        "text": "breast",
+        "context": "Tissue type: breast cancer sample"
+      }
+    ]
+  },
+  "Disease": {
+    "value": "breast cancer",
+    "excerpts": [
+      {
+        "file": "source_page.html",
+        "text": "breast cancer",
+        "context": "Sample from human breast cancer tissue"
+      }
+    ]
+  },
+  "Number of Cells": {
+    "value": 155891,
+    "excerpts": [
+      {
+        "file": "source_page.html",
+        "text": "155,891",
+        "context": "Total cells detected: 155,891"
+      }
+    ]
+  }
+}

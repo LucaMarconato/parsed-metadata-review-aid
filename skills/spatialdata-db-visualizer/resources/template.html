@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spatial Omics Metadata Viewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 350px;
+            background: #f5f5f5;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .sidebar h1 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .metadata-section {
+            margin-bottom: 25px;
+        }
+
+        .metadata-section h2 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metadata-field {
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .metadata-field:hover {
+            border-color: #ff9800;
+            background: #fff9f0;
+        }
+
+        .metadata-field.active {
+            border-color: #ff6f00;
+            background: #ffe0b2;
+        }
+
+        .field-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 4px;
+        }
+
+        .field-value {
+            font-size: 13px;
+            color: #333;
+            word-wrap: break-word;
+        }
+
+        .field-value.empty {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Tab bar */
+        .tab-bar {
+            display: flex;
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 20px 0;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            margin-right: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            font-size: 13px;
+        }
+
+        .tab:hover {
+            background: #e0e0e0;
+        }
+
+        .tab.active {
+            background: white;
+            border-bottom: 2px solid white;
+            margin-bottom: -1px;
+            font-weight: 600;
+        }
+
+        .tab.highlighted {
+            background: #ffe0b2;
+            border-color: #ff9800;
+        }
+
+        .tab.active.highlighted {
+            background: white;
+            box-shadow: inset 0 -3px 0 #ff9800;
+        }
+
+        /* Document viewer */
+        .document-viewer {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+            background: white;
+        }
+
+        .document-content {
+            display: none;
+        }
+
+        .document-content.active {
+            display: block;
+        }
+
+        /* Highlighting */
+        .highlight {
+            background-color: #ff9800;
+            color: white;
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-weight: 500;
+        }
+
+        /* Controls */
+        .controls {
+            padding: 10px 20px;
+            background: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #f0f0f0;
+            border-color: #bbb;
+        }
+
+        .info-text {
+            font-size: 12px;
+            color: #666;
+            margin-left: auto;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h1>Metadata Fields</h1>
+            <!-- Metadata sections will be inserted here by JavaScript -->
+            <div id="metadata-container"></div>
+        </div>
+
+        <!-- Main content -->
+        <div class="main-content">
+            <!-- Controls -->
+            <div class="controls">
+                <button class="btn" id="clear-btn">Clear Highlights</button>
+                <span class="info-text">Click a metadata field to see its source</span>
+            </div>
+
+            <!-- Tab bar -->
+            <div class="tab-bar" id="tab-bar">
+                <!-- Tabs will be inserted here by JavaScript -->
+            </div>
+
+            <!-- Document viewer -->
+            <div class="document-viewer" id="document-viewer">
+                <!-- Document contents will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================================
+        // DATA SECTION - Replace this with actual data
+        // ============================================================================
+
+        const METADATA = /* METADATA_PLACEHOLDER */;
+
+        const MAPPING = /* MAPPING_PLACEHOLDER */;
+
+        const SOURCE_DOCUMENTS = /* DOCUMENTS_PLACEHOLDER */;
+
+        // ============================================================================
+        // APPLICATION CODE
+        // ============================================================================
+
+        class MetadataViewer {
+            constructor() {
+                this.currentTab = null;
+                this.activeField = null;
+                this.init();
+            }
+
+            init() {
+                this.renderMetadata();
+                this.renderTabs();
+                this.renderDocuments();
+                this.attachEventListeners();
+
+                // Select first tab by default
+                if (Object.keys(SOURCE_DOCUMENTS).length > 0) {
+                    const firstTab = Object.keys(SOURCE_DOCUMENTS)[0];
+                    this.switchTab(firstTab);
+                }
+            }
+
+            renderMetadata() {
+                const container = document.getElementById('metadata-container');
+
+                // Group fields by category
+                const sections = {
+                    'Sample Level': [],
+                    'Xenium Specific': [],
+                    'Visium Specific': []
+                };
+
+                // Define which fields belong to which section based on schema
+                const sampleFields = ['Product', 'Assay', 'Biomaterial Type', 'Organism', 'Tissue',
+                                     'Modality', 'Dataset Url', 'License', 'Publication Date',
+                                     'Replicate', 'Sample ID at Source', 'Development Stage',
+                                     'Disease', 'Disease Details', 'Chemistry Version', 'Chemistry Details',
+                                     'Preservation Method', 'Staining Method', 'Instrument(s)',
+                                     'Software', 'Number of Target Genes'];
+
+                const xeniumFields = ['Panel Type', 'Panel', 'Number of Cells', 'Number of Add-on Genes',
+                                     'Median Transcripts per Cell', 'Region Area', 'Total Cell Area'];
+
+                const visiumFields = ['Probe Set', 'Sequencing Configuration', 'Slide Area',
+                                     'Number of Spots', 'Genes Detected', 'Median Genes per Spot',
+                                     'Mean Reads per Spot', 'Transcriptome', 'Microscope', 'Objective',
+                                     'Numerical Aperture', 'Camera', 'Exposure', 'Gain'];
+
+                // Categorize fields
+                for (const [field, value] of Object.entries(METADATA)) {
+                    if (sampleFields.includes(field)) {
+                        sections['Sample Level'].push({ field, value });
+                    } else if (xeniumFields.includes(field)) {
+                        sections['Xenium Specific'].push({ field, value });
+                    } else if (visiumFields.includes(field)) {
+                        sections['Visium Specific'].push({ field, value });
+                    } else {
+                        // Unknown fields go to Sample Level
+                        sections['Sample Level'].push({ field, value });
+                    }
+                }
+
+                // Render sections
+                for (const [sectionName, fields] of Object.entries(sections)) {
+                    if (fields.length === 0) continue;
+
+                    const sectionDiv = document.createElement('div');
+                    sectionDiv.className = 'metadata-section';
+
+                    const header = document.createElement('h2');
+                    header.textContent = sectionName;
+                    sectionDiv.appendChild(header);
+
+                    for (const { field, value } of fields) {
+                        const fieldDiv = document.createElement('div');
+                        fieldDiv.className = 'metadata-field';
+                        fieldDiv.dataset.field = field;
+
+                        const nameDiv = document.createElement('div');
+                        nameDiv.className = 'field-name';
+                        nameDiv.textContent = field;
+
+                        const valueDiv = document.createElement('div');
+                        valueDiv.className = value ? 'field-value' : 'field-value empty';
+                        valueDiv.textContent = value || '(not available)';
+
+                        fieldDiv.appendChild(nameDiv);
+                        fieldDiv.appendChild(valueDiv);
+                        sectionDiv.appendChild(fieldDiv);
+                    }
+
+                    container.appendChild(sectionDiv);
+                }
+            }
+
+            renderTabs() {
+                const tabBar = document.getElementById('tab-bar');
+
+                for (const filename of Object.keys(SOURCE_DOCUMENTS)) {
+                    const tab = document.createElement('div');
+                    tab.className = 'tab';
+                    tab.dataset.file = filename;
+                    tab.textContent = filename;
+                    tabBar.appendChild(tab);
+                }
+            }
+
+            renderDocuments() {
+                const viewer = document.getElementById('document-viewer');
+
+                for (const [filename, content] of Object.entries(SOURCE_DOCUMENTS)) {
+                    const docDiv = document.createElement('div');
+                    docDiv.className = 'document-content';
+                    docDiv.dataset.file = filename;
+                    docDiv.innerHTML = content;
+                    viewer.appendChild(docDiv);
+                }
+            }
+
+            attachEventListeners() {
+                // Metadata field clicks
+                document.querySelectorAll('.metadata-field').forEach(field => {
+                    field.addEventListener('click', (e) => {
+                        const fieldName = e.currentTarget.dataset.field;
+                        this.selectField(fieldName);
+                    });
+                });
+
+                // Tab clicks
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        const filename = e.currentTarget.dataset.file;
+                        this.switchTab(filename);
+                    });
+                });
+
+                // Clear button
+                document.getElementById('clear-btn').addEventListener('click', () => {
+                    this.clearHighlights();
+                });
+            }
+
+            switchTab(filename) {
+                // Update tab styling
+                document.querySelectorAll('.tab').forEach(tab => {
+                    if (tab.dataset.file === filename) {
+                        tab.classList.add('active');
+                    } else {
+                        tab.classList.remove('active');
+                    }
+                });
+
+                // Update document visibility
+                document.querySelectorAll('.document-content').forEach(doc => {
+                    if (doc.dataset.file === filename) {
+                        doc.classList.add('active');
+                    } else {
+                        doc.classList.remove('active');
+                    }
+                });
+
+                this.currentTab = filename;
+            }
+
+            selectField(fieldName) {
+                // Clear previous selection
+                this.clearHighlights();
+
+                // Mark field as active
+                document.querySelectorAll('.metadata-field').forEach(field => {
+                    if (field.dataset.field === fieldName) {
+                        field.classList.add('active');
+                    } else {
+                        field.classList.remove('active');
+                    }
+                });
+
+                this.activeField = fieldName;
+
+                // Get mapping for this field
+                const mapping = MAPPING[fieldName];
+                if (!mapping || !mapping.excerpts) {
+                    return;
+                }
+
+                // Collect files that have excerpts
+                const filesWithExcerpts = new Set();
+                mapping.excerpts.forEach(excerpt => {
+                    filesWithExcerpts.add(excerpt.file);
+                });
+
+                // Highlight tabs
+                document.querySelectorAll('.tab').forEach(tab => {
+                    if (filesWithExcerpts.has(tab.dataset.file)) {
+                        tab.classList.add('highlighted');
+                    }
+                });
+
+                // Switch to first file with excerpt
+                if (filesWithExcerpts.size > 0) {
+                    const firstFile = Array.from(filesWithExcerpts)[0];
+                    this.switchTab(firstFile);
+                }
+
+                // Highlight excerpts in documents
+                mapping.excerpts.forEach(excerpt => {
+                    this.highlightText(excerpt.file, excerpt.text);
+                });
+            }
+
+            highlightText(filename, searchText) {
+                const docElement = document.querySelector(`.document-content[data-file="${filename}"]`);
+                if (!docElement) return;
+
+                // Find and highlight text
+                const walker = document.createTreeWalker(
+                    docElement,
+                    NodeFilter.SHOW_TEXT,
+                    null,
+                    false
+                );
+
+                const textNodes = [];
+                let node;
+                while (node = walker.nextNode()) {
+                    textNodes.push(node);
+                }
+
+                let firstHighlight = null;
+
+                textNodes.forEach(textNode => {
+                    const text = textNode.textContent;
+                    const index = text.indexOf(searchText);
+
+                    if (index !== -1) {
+                        const span = document.createElement('span');
+                        span.className = 'highlight';
+
+                        const range = document.createRange();
+                        range.setStart(textNode, index);
+                        range.setEnd(textNode, index + searchText.length);
+                        range.surroundContents(span);
+
+                        if (!firstHighlight) {
+                            firstHighlight = span;
+                        }
+                    }
+                });
+
+                // Scroll to first highlight
+                if (firstHighlight) {
+                    firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+
+            clearHighlights() {
+                // Remove active field
+                document.querySelectorAll('.metadata-field').forEach(field => {
+                    field.classList.remove('active');
+                });
+
+                // Remove tab highlights
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.classList.remove('highlighted');
+                });
+
+                // Remove text highlights
+                document.querySelectorAll('.highlight').forEach(highlight => {
+                    const parent = highlight.parentNode;
+                    parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
+                    parent.normalize();
+                });
+
+                this.activeField = null;
+            }
+        }
+
+        // Initialize the viewer when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new MetadataViewer();
+        });
+    </script>
+</body>
+</html>
